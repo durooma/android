@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "318487213973",
+    "project_id": "durooma-finance"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318487213973:android:9da0fc0a4ffcf7be",
+        "android_client_info": {
+          "package_name": "com.durooma.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "318487213973-908chgsif5n1mef9pq97mfrav8h29jnq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.durooma.android",
+            "certificate_hash": "4b84c8f674ed133264cd461167f5227cdf0f20fe"
+          }
+        },
+        {
+          "client_id": "318487213973-llmhckcpa3stg6rog9un2idp31o6ndmi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANF27KjzsBUwVB3R-uLStmrR3HyoFiitw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
