@@ -23,27 +23,4 @@ public class TransactionActivity extends AppCompatActivity {
     @ViewById
     ProgressBar progress;
 
-    @AfterViews
-    void init() {
-        progress.setVisibility(View.VISIBLE);
-        Api.get().getAccounts().enqueue(new Callback<List<Account>>() {
-            @Override
-            public void onResponse(Call<List<Account>> call, Response<List<Account>> response) {
-                if (response.isSuccessful()) {
-
-                } else {
-                    DialogUtil.showError(TransactionActivity.this, response);
-                }
-                progress.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onFailure(Call<List<Account>> call, Throwable t) {
-                t.printStackTrace();
-                DialogUtil.showError(TransactionActivity.this, t.getLocalizedMessage());
-                progress.setVisibility(View.GONE);
-            }
-        });
-    }
-
 }

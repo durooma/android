@@ -19,4 +19,9 @@
     <string name="last_name">Last name</string>
     <string name="ok">OK</string>
     <string name="login">Login</string>
+    <string name="drawer_open">Open drawer</string>
+    <string name="drawer_close">Close drawer</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="accounts">Accounts</string>
+    <string name="transactions">Transactions</string>
 </resources>
