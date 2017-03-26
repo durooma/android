@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import com.durooma.android.api.Api;
 import com.durooma.android.model.UserRegistration;
+import com.durooma.android.util.DialogUtil;
 import com.durooma.android.util.TextInputLayoutAdapter;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -66,26 +67,14 @@ public class SignupActivity extends AppCompatActivity implements Callback<Void>,
         if (response.isSuccessful()) {
             startActivity(new Intent(this, TransactionActivity.class));
         } else {
-            try {
-                new AlertDialog.Builder(this)
-                        .setMessage(response.errorBody().string())
-                        .setNeutralButton(R.string.ok, null)
-                        .create()
-                        .show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            DialogUtil.showError(this, response);
         }
     }
 
     @Override
     public void onFailure(Call<Void> call, Throwable t) {
         progress.setVisibility(View.INVISIBLE);
-        new AlertDialog.Builder(this)
-                .setMessage(t.getLocalizedMessage())
-                .setNeutralButton(R.string.ok, null)
-                .create()
-                .show();
+        DialogUtil.showError(this, t.getLocalizedMessage());
     }
 
     @Override

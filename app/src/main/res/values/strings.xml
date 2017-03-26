@@ -18,4 +18,5 @@
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="ok">OK</string>
+    <string name="login">Login</string>
 </resources>
