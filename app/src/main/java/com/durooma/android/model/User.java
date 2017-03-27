@@ -55,4 +55,14 @@ public class User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    private static User currentUser;
+
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(User user) {
+        currentUser = user;
+    }
 }

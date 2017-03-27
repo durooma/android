@@ -1,9 +1,11 @@
 package com.durooma.android;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import com.durooma.android.api.Api;
 import com.durooma.android.model.Session;
+import com.durooma.android.model.User;
 import com.durooma.android.util.DialogUtil;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -22,7 +24,9 @@ public class SplashActivity extends AppCompatActivity implements Callback<Sessio
     @Override
     public void onResponse(Call<Session> call, Response<Session> response) {
         if (response.isSuccessful()) {
-
+            User.setCurrentUser(response.body().getUser());
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
         } else {
             DialogUtil.showError(this, response);
         }
