@@ -22,6 +22,10 @@ public interface DuroomaApi {
     Call<Session> login(@Body UserCredentials userCredentials);
 
     @Authenticated({R.string.authentication_account, R.string.authentication_token})
+    @GET("/session")
+    Call<Session> getSession();
+
+    @Authenticated({R.string.authentication_account, R.string.authentication_token})
     @GET("/account")
     Call<List<Account>> getAccounts();
 
