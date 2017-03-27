@@ -15,14 +15,18 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
         </activity>
-        <activity android:name=".LoginActivity_">
+        <activity
+            android:name=".LoginActivity_"
+            android:theme="@style/AppTheme.ActionBar">
             <intent-filter>
                 <action android:name="com.durooma.android.ACTION"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".SignupActivity_">
+        <activity
+            android:name=".SignupActivity_"
+            android:theme="@style/AppTheme.ActionBar">
         </activity>
 
         <service
