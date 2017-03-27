@@ -1,6 +1,5 @@
 package com.durooma.android;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +20,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.io.IOException;
 import java.util.List;
 
 @EActivity(R.layout.activity_signup)
@@ -65,7 +63,7 @@ public class SignupActivity extends AppCompatActivity implements Callback<Void>,
     public void onResponse(Call<Void> call, Response<Void> response) {
         progress.setVisibility(View.INVISIBLE);
         if (response.isSuccessful()) {
-            startActivity(new Intent(this, TransactionActivity.class));
+            startActivity(new Intent(this, TransactionsFragment.class));
         } else {
             DialogUtil.showError(this, response);
         }
