@@ -24,6 +24,8 @@
     <string name="dashboard">Dashboard</string>
     <string name="accounts">Accounts</string>
     <string name="transactions">Transactions</string>
+    <string name="account_name">Account Name</string>
+    <string name="initial_balance">Initial Balance</string>
 
     <string name="title_activity_splash">SplashActivity</string>
 </resources>

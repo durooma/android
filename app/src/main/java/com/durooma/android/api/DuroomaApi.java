@@ -2,10 +2,7 @@ package com.durooma.android.api;
 
 import com.andretietz.retroauth.Authenticated;
 import com.durooma.android.R;
-import com.durooma.android.model.Account;
-import com.durooma.android.model.Session;
-import com.durooma.android.model.UserCredentials;
-import com.durooma.android.model.UserRegistration;
+import com.durooma.android.model.*;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -28,5 +25,9 @@ public interface DuroomaApi {
     @Authenticated({R.string.authentication_account, R.string.authentication_token})
     @GET("/account")
     Call<List<Account>> getAccounts();
+
+    @Authenticated({R.string.authentication_account, R.string.authentication_token})
+    @POST("/account")
+    Call<Void> addAccount(@Body AccountBody account);
 
 }

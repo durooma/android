@@ -25,4 +25,9 @@ public class DialogUtil {
         }
     }
 
+    public static void showError(Context context, Throwable t) {
+        t.printStackTrace();
+        showError(context, t.getLocalizedMessage());
+    }
+
 }

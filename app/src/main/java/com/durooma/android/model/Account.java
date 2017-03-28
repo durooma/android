@@ -1,15 +1,12 @@
 package com.durooma.android.model;
 
-public class Account {
+public class Account extends AccountBody {
 
     private long id;
-    private String name;
-    private double initialBalance;
 
     public Account(long id, String name, double initialBalance) {
+        super(name, initialBalance);
         this.id = id;
-        this.name = name;
-        this.initialBalance = initialBalance;
     }
 
     public long getId() {
@@ -18,22 +15,6 @@ public class Account {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getInitialBalance() {
-        return initialBalance;
-    }
-
-    public void setInitialBalance(double initialBalance) {
-        this.initialBalance = initialBalance;
     }
 
 }
