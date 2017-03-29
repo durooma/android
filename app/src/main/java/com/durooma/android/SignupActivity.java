@@ -16,15 +16,14 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
 import com.mobsandgeeks.saripaar.exception.ConversionException;
 import org.androidannotations.annotations.*;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 
 import java.util.List;
 
 @EActivity(R.layout.activity_signup)
 @OptionsMenu(R.menu.activity_signup)
-public class SignupActivity extends AppCompatActivity implements Callback<Void>, Validator.ValidationListener {
+public class SignupActivity extends AppCompatActivity implements Observer<Void>, Validator.ValidationListener {
 
     @ViewById
     @NotEmpty
@@ -60,22 +59,6 @@ public class SignupActivity extends AppCompatActivity implements Callback<Void>,
     }
 
     @Override
-    public void onResponse(Call<Void> call, Response<Void> response) {
-        progress.setVisibility(View.INVISIBLE);
-        if (response.isSuccessful()) {
-            startActivity(new Intent(this, TransactionsFragment.class));
-        } else {
-            DialogUtil.showError(this, response);
-        }
-    }
-
-    @Override
-    public void onFailure(Call<Void> call, Throwable t) {
-        progress.setVisibility(View.INVISIBLE);
-        DialogUtil.showError(this, t.getLocalizedMessage());
-    }
-
-    @Override
     public void onValidationSucceeded() {
         try {
             Api.get().signup(new UserRegistration(
@@ -83,7 +66,9 @@ public class SignupActivity extends AppCompatActivity implements Callback<Void>,
                     adapter.getData(password),
                     adapter.getData(firstName),
                     adapter.getData(lastName)
-            )).enqueue(this);
+            ))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this);
             progress.setVisibility(View.VISIBLE);
             email.setError(null);
             password.setError(null);
@@ -97,5 +82,20 @@ public class SignupActivity extends AppCompatActivity implements Callback<Void>,
         for (ValidationError error : errors) {
             ((TextInputLayout) error.getView()).setError(error.getCollatedErrorMessage(this));
         }
+    }
+
+    @Override
+    public void onCompleted() {
+        progress.setVisibility(View.INVISIBLE);
+        startActivity(new Intent(this, TransactionsFragment.class));
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        DialogUtil.showError(this, e);
+    }
+
+    @Override
+    public void onNext(Void aVoid) {
     }
 }

@@ -2,39 +2,38 @@ package com.durooma.android;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import com.durooma.android.api.Api;
 import com.durooma.android.model.Session;
 import com.durooma.android.model.User;
 import com.durooma.android.util.DialogUtil;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 
 @EActivity(R.layout.activity_splash)
-public class SplashActivity extends AppCompatActivity implements Callback<Session> {
+public class SplashActivity extends AppCompatActivity implements Observer<Session> {
 
     @AfterViews
     public void init() {
-        Api.get().getSession().enqueue(this);
+        Api.get().getSession()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this);
     }
 
     @Override
-    public void onResponse(Call<Session> call, Response<Session> response) {
-        if (response.isSuccessful()) {
-            User.setCurrentUser(response.body().getUser());
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        } else {
-            DialogUtil.showError(this, response);
-        }
+    public void onCompleted() {
     }
 
     @Override
-    public void onFailure(Call<Session> call, Throwable t) {
-        t.printStackTrace();
-        DialogUtil.showError(this, t.getLocalizedMessage());
+    public void onError(Throwable e) {
+        DialogUtil.showError(this, e);
+    }
+
+    @Override
+    public void onNext(Session session) {
+        User.setCurrentUser(session.getUser());
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 }

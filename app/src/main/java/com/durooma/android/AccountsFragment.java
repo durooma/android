@@ -18,7 +18,11 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @EFragment(R.layout.fragment_accounts)
@@ -52,7 +56,7 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
 
     @AfterViews
     public void init() {
-        statusViews = new View[] { progress, empty, list, error };
+        statusViews = new View[]{progress, empty, list, error};
         getLoaderManager().initLoader(LOAD_ACCOUNTS, null, this);
         listAdapter = new AccountAdapter(getContext());
         list.setAdapter(listAdapter);
@@ -107,8 +111,21 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
-    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        return false;
+    public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
+        List<Observable<Void>> deleteOperations = new ArrayList<>();
+        for (Long id : list.getCheckedItemIds()) {
+            deleteOperations.add(Api.get().removeAccount(id));
+        }
+        Observable.merge(deleteOperations)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        getLoaderManager().restartLoader(LOAD_ACCOUNTS, null, AccountsFragment.this);
+                        mode.finish();
+                    }
+                });
+        return true;
     }
 
     @Override

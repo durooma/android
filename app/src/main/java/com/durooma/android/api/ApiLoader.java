@@ -2,16 +2,33 @@ package com.durooma.android.api;
 
 import android.content.Context;
 import android.support.v4.content.Loader;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-public class ApiLoader<D> extends Loader<D> implements Callback<D> {
-
-    private Call<D> call;
-    private Call<D> currentCall;
+public class ApiLoader<D> extends Loader<D> implements Observer<D> {
 
     private D current;
+    private Observable<D> call;
+    private Subscription connection;
+
+    @Override
+    public void onNext(D d) {
+        deliverResult(d);
+    }
+
+    @Override
+    public void onCompleted() {
+        connection = null;
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        e.printStackTrace();
+        deliverResult(null);
+    }
 
     /**
      * Stores away the application context associated with context.
@@ -23,7 +40,7 @@ public class ApiLoader<D> extends Loader<D> implements Callback<D> {
      *
      * @param context used to retrieve the application context.
      */
-    public ApiLoader(Context context, Call<D> call) {
+    public ApiLoader(Context context, Observable<D> call) {
         super(context);
         this.call = call;
     }
@@ -32,9 +49,8 @@ public class ApiLoader<D> extends Loader<D> implements Callback<D> {
     protected void onStartLoading() {
         super.onStartLoading();
         if (current == null) {
-            if (currentCall == null) {
-                currentCall = call.clone();
-                currentCall.enqueue(this);
+            if (connection == null) {
+                connection = call.observeOn(AndroidSchedulers.mainThread()).subscribe(this);
             }
         } else {
             deliverResult(current);
@@ -43,7 +59,7 @@ public class ApiLoader<D> extends Loader<D> implements Callback<D> {
 
     @Override
     public void deliverResult(D data) {
-        currentCall = null;
+        connection = null;
         super.deliverResult(data);
     }
 
@@ -51,15 +67,13 @@ public class ApiLoader<D> extends Loader<D> implements Callback<D> {
     protected void onReset() {
         super.onReset();
         current = null;
-        currentCall = null;
     }
 
     @Override
     protected void onStopLoading() {
         super.onStopLoading();
-        if (currentCall != null) {
-            currentCall.cancel();
-            currentCall = null;
+        if (connection != null) {
+            connection.unsubscribe();
         }
         current = null;
     }
@@ -67,23 +81,8 @@ public class ApiLoader<D> extends Loader<D> implements Callback<D> {
     @Override
     protected void onForceLoad() {
         super.onForceLoad();
-        currentCall = call.clone();
-        currentCall.enqueue(this);
-    }
-
-    @Override
-    public void onResponse(Call<D> call, Response<D> response) {
-        if (response.isSuccessful()) {
-            current = response.body();
-            deliverResult(current);
-        } else {
-            deliverResult(null);
-        }
-    }
-
-    @Override
-    public void onFailure(Call<D> call, Throwable t) {
-        t.printStackTrace();
-        deliverResult(null);
+        call.subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this);
     }
 }

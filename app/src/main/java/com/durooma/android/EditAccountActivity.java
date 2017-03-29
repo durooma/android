@@ -9,13 +9,12 @@ import com.durooma.android.util.DialogUtil;
 import com.durooma.android.util.TextInputLayoutAdapter;
 import com.mobsandgeeks.saripaar.exception.ConversionException;
 import org.androidannotations.annotations.*;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 
 @EActivity(R.layout.activity_edit_account)
 @OptionsMenu(R.menu.activity_edit)
-public class EditAccountActivity extends AppCompatActivity implements Callback<Void> {
+public class EditAccountActivity extends AppCompatActivity implements Observer<Void> {
 
     public static final int RESULT_SUCCESS = 0;
     public static final int RESULT_CANCELED = 1;
@@ -56,7 +55,9 @@ public class EditAccountActivity extends AppCompatActivity implements Callback<V
             Api.get().addAccount(new AccountBody(
                     adapter.getData(name),
                     Double.parseDouble(adapter.getData(initialBalance))
-            )).enqueue(this);
+            ))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this);
             setLoading(true);
         } catch (ConversionException e) {
             e.printStackTrace();
@@ -70,19 +71,20 @@ public class EditAccountActivity extends AppCompatActivity implements Callback<V
     }
 
     @Override
-    public void onResponse(Call<Void> call, Response<Void> response) {
-        setLoading(false);
-        if (response.isSuccessful()) {
-            setResult(RESULT_SUCCESS);
-            finish();
-        } else {
-            DialogUtil.showError(this, response);
-        }
+    public void onCompleted() {
+
     }
 
     @Override
-    public void onFailure(Call<Void> call, Throwable t) {
+    public void onError(Throwable e) {
         setLoading(false);
-        DialogUtil.showError(this, t);
+        DialogUtil.showError(this, e);
+    }
+
+    @Override
+    public void onNext(Void aVoid) {
+        setLoading(false);
+        setResult(RESULT_SUCCESS);
+        finish();
     }
 }

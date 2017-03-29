@@ -23,13 +23,12 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.mobsandgeeks.saripaar.exception.ConversionException;
 import org.androidannotations.annotations.*;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 
 @EActivity(R.layout.activity_login)
 @OptionsMenu(R.menu.activity_login)
-public class LoginActivity extends AuthenticationActivity implements GoogleApiClient.OnConnectionFailedListener, Callback<Session> {
+public class LoginActivity extends AuthenticationActivity implements GoogleApiClient.OnConnectionFailedListener, Observer<Session> {
 
     @ViewById(R.id.email)
     TextInputLayout emailInput;
@@ -69,7 +68,8 @@ public class LoginActivity extends AuthenticationActivity implements GoogleApiCl
             String password = adapter.getData(passwordInput);
 
             Api.get().login(new UserCredentials(email, password))
-                    .enqueue(this);
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this);
         } catch (ConversionException e) {
             e.printStackTrace();
         }
@@ -95,20 +95,19 @@ public class LoginActivity extends AuthenticationActivity implements GoogleApiCl
     }
 
     @Override
-    public void onResponse(Call<Session> call, Response<Session> response) {
-        if (response.isSuccessful()) {
-            Session session = response.body();
-            Account account = createOrGetAccount(session.getUser().getEmail());
-            storeToken(account, getString(R.string.authentication_token), session.getToken());
-            finalizeAuthentication(account);
-        } else {
-            DialogUtil.showError(this, response);
-        }
+    public void onCompleted() {
+
     }
 
     @Override
-    public void onFailure(Call<Session> call, Throwable t) {
-        t.printStackTrace();
-        DialogUtil.showError(this, t.getLocalizedMessage());
+    public void onError(Throwable e) {
+        DialogUtil.showError(this, e);
+    }
+
+    @Override
+    public void onNext(Session session) {
+        Account account = createOrGetAccount(session.getUser().getEmail());
+        storeToken(account, getString(R.string.authentication_token), session.getToken());
+        finalizeAuthentication(account);
     }
 }

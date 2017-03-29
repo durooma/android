@@ -3,31 +3,33 @@ package com.durooma.android.api;
 import com.andretietz.retroauth.Authenticated;
 import com.durooma.android.R;
 import com.durooma.android.model.*;
-import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
+import retrofit2.http.*;
+import rx.Observable;
 
 import java.util.List;
 
 public interface DuroomaApi {
 
     @POST("/user")
-    Call<Void> signup(@Body UserRegistration userRegistration);
+    Observable<Void> signup(@Body UserRegistration userRegistration);
 
     @POST("/session")
-    Call<Session> login(@Body UserCredentials userCredentials);
+    Observable<Session> login(@Body UserCredentials userCredentials);
 
     @Authenticated({R.string.authentication_account, R.string.authentication_token})
     @GET("/session")
-    Call<Session> getSession();
+    Observable<Session> getSession();
 
     @Authenticated({R.string.authentication_account, R.string.authentication_token})
     @GET("/account")
-    Call<List<Account>> getAccounts();
+    Observable<List<Account>> getAccounts();
 
     @Authenticated({R.string.authentication_account, R.string.authentication_token})
     @POST("/account")
-    Call<Void> addAccount(@Body AccountBody account);
+    Observable<Void> addAccount(@Body AccountBody account);
+
+    @Authenticated({R.string.authentication_account, R.string.authentication_token})
+    @DELETE("/account/{id}")
+    Observable<Void> removeAccount(@Path("id") long id);
 
 }
