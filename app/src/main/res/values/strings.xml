@@ -28,4 +28,6 @@
     <string name="initial_balance">Initial Balance</string>
 
     <string name="title_activity_splash">SplashActivity</string>
+    <string name="edit_accounts">Edit Accounts</string>
+    <string name="delete_items">Delete items</string>
 </resources>

@@ -6,14 +6,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.view.ActionMode;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import com.durooma.android.api.Api;
 import com.durooma.android.api.ApiLoader;
 import com.durooma.android.controller.AccountAdapter;
@@ -99,12 +95,15 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        return false;
+        MenuInflater menuInflater = mode.getMenuInflater();
+        menuInflater.inflate(R.menu.edit_items, menu);
+        mode.setTitle(R.string.edit_accounts);
+        return true;
     }
 
     @Override
     public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        return false;
+        return true;
     }
 
     @Override
@@ -114,7 +113,6 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onDestroyActionMode(ActionMode mode) {
-
     }
 
     @Click(R.id.fab)
