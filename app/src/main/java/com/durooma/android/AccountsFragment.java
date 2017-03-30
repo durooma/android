@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.*;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
@@ -14,10 +15,7 @@ import com.durooma.android.api.Api;
 import com.durooma.android.api.ApiLoader;
 import com.durooma.android.controller.AccountAdapter;
 import com.durooma.android.model.Account;
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.*;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -26,20 +24,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @EFragment(R.layout.fragment_accounts)
-public class AccountsFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Account>>, AbsListView.MultiChoiceModeListener {
+@OptionsMenu(R.menu.fragment_list)
+public class AccountsFragment
+        extends Fragment
+        implements LoaderManager.LoaderCallbacks<List<Account>>,
+        AbsListView.MultiChoiceModeListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
-    protected static final int STATUS_LOADING = 0;
-    protected static final int STATUS_EMPTY = 1;
-    protected static final int STATUS_LIST = 2;
-    protected static final int STATUS_ERROR = 3;
+    protected static final int STATUS_EMPTY = 0;
+    protected static final int STATUS_LIST = 1;
+    protected static final int STATUS_ERROR = 2;
 
     protected static final int LOAD_ACCOUNTS = 0;
 
     @ViewById
     ListView list;
-
-    @ViewById
-    View progress;
 
     @ViewById
     View empty;
@@ -50,22 +49,25 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
     @ViewById
     FloatingActionButton fab;
 
+    @ViewById
+    SwipeRefreshLayout swipeRefresh;
+
     private ArrayAdapter<Account> listAdapter;
 
     private View[] statusViews;
 
     @AfterViews
     public void init() {
-        statusViews = new View[]{progress, empty, list, error};
+        statusViews = new View[]{empty, list, error};
         getLoaderManager().initLoader(LOAD_ACCOUNTS, null, this);
         listAdapter = new AccountAdapter(getContext());
         list.setAdapter(listAdapter);
         list.setMultiChoiceModeListener(this);
-        setStatus(STATUS_LOADING);
+        swipeRefresh.setOnRefreshListener(this);
+        swipeRefresh.setRefreshing(true);
     }
 
     public void setStatus(int status) {
-        progress.setVisibility(View.GONE);
         list.setVisibility(View.GONE);
         empty.setVisibility(View.GONE);
         error.setVisibility(View.GONE);
@@ -79,6 +81,7 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<List<Account>> loader, List<Account> data) {
+        swipeRefresh.setRefreshing(false);
         listAdapter.clear();
         if (data != null) {
             listAdapter.addAll(data);
@@ -135,5 +138,21 @@ public class AccountsFragment extends Fragment implements LoaderManager.LoaderCa
     @Click(R.id.fab)
     public void newAccount() {
         startActivity(new Intent(getContext(), EditAccountActivity_.class));
+    }
+
+    void refresh() {
+        getLoaderManager().restartLoader(LOAD_ACCOUNTS, null, this);
+    }
+
+    @OptionsItem(R.id.menu_refresh)
+    void menuRefresh() {
+        swipeRefresh.setRefreshing(true);
+        refresh();
+    }
+
+
+    @Override
+    public void onRefresh() {
+        refresh();
     }
 }
