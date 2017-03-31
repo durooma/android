@@ -32,4 +32,16 @@ public interface DuroomaApi {
     @DELETE("/account/{id}")
     Observable<Void> removeAccount(@Path("id") long id);
 
+    @Authenticated({R.string.authentication_account, R.string.authentication_token})
+    @GET("/transaction")
+    Observable<List<Transaction>> getTransactions(@Query("type") String type);
+
+    @Authenticated({R.string.authentication_account, R.string.authentication_token})
+    @POST("/transaction")
+    Observable<Void> addTransaction(@Body TransactionBody account);
+
+    @Authenticated({R.string.authentication_account, R.string.authentication_token})
+    @DELETE("/transaction/{id}")
+    Observable<Void> removeTransaction(@Path("id") long id);
+
 }

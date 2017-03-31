@@ -9,6 +9,7 @@ import com.durooma.android.model.Account;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import rx.Observable;
+import rx.functions.Action1;
 
 import java.util.List;
 
@@ -22,7 +23,12 @@ public class AccountsFragment extends ListFragment<Account> {
 
     @Override
     protected Observable<List<Account>> getItems() {
-        return Api.get().getAccounts();
+        return Api.get().getAccounts().doOnNext(new Action1<List<Account>>() {
+            @Override
+            public void call(List<Account> accounts) {
+                Account.updateCache(accounts);
+            }
+        });
     }
 
     @Override

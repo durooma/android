@@ -87,7 +87,7 @@ public class SignupActivity extends AppCompatActivity implements Observer<Void>,
     @Override
     public void onCompleted() {
         progress.setVisibility(View.INVISIBLE);
-        startActivity(new Intent(this, TransactionsFragment.class));
+        startActivity(new Intent(this, TransactionListFragment.class));
     }
 
     @Override

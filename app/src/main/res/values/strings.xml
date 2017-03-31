@@ -31,4 +31,8 @@
     <string name="edit_accounts">Edit Accounts</string>
     <string name="delete_items">Delete items</string>
     <string name="refresh">Refresh</string>
+
+    <string name="expense">Expense</string>
+    <string name="income">Income</string>
+    <string name="transfer">Transfer</string>
 </resources>
