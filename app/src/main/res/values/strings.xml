@@ -35,4 +35,9 @@
     <string name="expense">Expense</string>
     <string name="income">Income</string>
     <string name="transfer">Transfer</string>
+
+    <string name="amount">Amount</string>
+    <string name="source_account">Source Account</string>
+    <string name="target_account">Target Account</string>
+    <string name="exempt">Exempt from Huqúqu\'lláh</string>
 </resources>

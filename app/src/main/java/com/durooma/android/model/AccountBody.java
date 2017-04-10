@@ -26,4 +26,8 @@ public class AccountBody {
         this.initialBalance = initialBalance;
     }
 
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

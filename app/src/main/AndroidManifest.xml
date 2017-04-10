@@ -49,6 +49,8 @@
         </activity>
         <activity android:name=".EditAccountActivity_">
         </activity>
+        <activity android:name=".EditTransactionActivity_">
+        </activity>
     </application>
 
 </manifest>

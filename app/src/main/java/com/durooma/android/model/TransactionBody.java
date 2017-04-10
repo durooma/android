@@ -7,13 +7,13 @@ public class TransactionBody {
     private Long source;
     private Long target;
     private BigDecimal amount;
-    private BigDecimal huquqAmount;
+    private BigDecimal exempt;
 
-    public TransactionBody(Long source, Long target, BigDecimal amount, BigDecimal huquqAmount) {
+    public TransactionBody(Long source, Long target, BigDecimal amount, BigDecimal exempt) {
         this.source = source;
         this.target = target;
         this.amount = amount;
-        this.huquqAmount = huquqAmount;
+        this.exempt = exempt;
     }
 
     public Long getSource() {
@@ -40,11 +40,11 @@ public class TransactionBody {
         this.amount = amount;
     }
 
-    public BigDecimal getHuquqAmount() {
-        return huquqAmount;
+    public BigDecimal getExempt() {
+        return exempt;
     }
 
-    public void setHuquqAmount(BigDecimal huquqAmount) {
-        this.huquqAmount = huquqAmount;
+    public void setExempt(BigDecimal exempt) {
+        this.exempt = exempt;
     }
 }

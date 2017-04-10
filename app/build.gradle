@@ -50,6 +50,8 @@ dependencies {
     compile 'com.android.support:support-v4:25.3.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'org.androidannotations:androidannotations:4.3.0'
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -36,6 +36,16 @@ public class AccountAdapter extends ArrayAdapter<Account> {
     }
 
     @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        Account account = getItem(position);
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.item_account_dropdown, parent, false);
+        }
+        ((TextView)convertView).setText(account.getName());
+        return convertView;
+    }
+
+    @Override
     public long getItemId(int position) {
         return getItem(position).getId();
     }

@@ -1,17 +1,21 @@
 package com.durooma.android;
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.ArrayAdapter;
 import com.durooma.android.api.Api;
 import com.durooma.android.controller.TransactionAdapter;
 import com.durooma.android.model.Account;
 import com.durooma.android.model.Transaction;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import rx.Observable;
 import rx.functions.Func1;
 
 import java.util.List;
+
+import static com.durooma.android.EditTransactionActivity.EXTRA_TRANSACTION_TYPE;
 
 @EFragment
 public class TransactionListFragment extends ListFragment<Transaction> {
@@ -44,5 +48,12 @@ public class TransactionListFragment extends ListFragment<Transaction> {
     @Override
     protected Observable<Void> removeItem(long id) {
         return Api.get().removeTransaction(id);
+    }
+
+    @Click(R.id.fab)
+    void newItem() {
+        Intent i = new Intent(getContext(), EditTransactionActivity_.class);
+        i.putExtra(EXTRA_TRANSACTION_TYPE, type);
+        startActivity(i);
     }
 }
