@@ -128,11 +128,13 @@ public abstract class ListFragment<T>
 
     }
 
+    protected abstract String getEditModeTitle();
+
     @Override
     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
         MenuInflater menuInflater = mode.getMenuInflater();
         menuInflater.inflate(R.menu.edit_items, menu);
-        mode.setTitle(R.string.edit_accounts);
+        mode.setTitle(getEditModeTitle());
         return true;
     }
 

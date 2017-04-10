@@ -40,4 +40,5 @@
     <string name="source_account">Source Account</string>
     <string name="target_account">Target Account</string>
     <string name="exempt">Exempt from Huqúqu\'lláh</string>
+    <string name="edit_transactions">Edit Transactions</string>
 </resources>

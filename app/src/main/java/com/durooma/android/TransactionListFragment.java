@@ -56,4 +56,9 @@ public class TransactionListFragment extends ListFragment<Transaction> {
         i.putExtra(EXTRA_TRANSACTION_TYPE, type);
         startActivity(i);
     }
+
+    @Override
+    protected String getEditModeTitle() {
+        return getString(R.string.edit_transactions);
+    }
 }

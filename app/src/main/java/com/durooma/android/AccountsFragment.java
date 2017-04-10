@@ -36,6 +36,11 @@ public class AccountsFragment extends ListFragment<Account> {
         return Api.get().removeAccount(id);
     }
 
+    @Override
+    protected String getEditModeTitle() {
+        return getString(R.string.edit_accounts);
+    }
+
     @Click(R.id.fab)
     public void newAccount() {
         startActivity(new Intent(getContext(), EditAccountActivity_.class));
