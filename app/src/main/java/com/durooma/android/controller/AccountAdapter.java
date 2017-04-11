@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.durooma.android.R;
 import com.durooma.android.model.Account;
 
+import java.util.Locale;
+
 public class AccountAdapter extends ArrayAdapter<Account> {
 
     private LayoutInflater inflater;
@@ -28,9 +30,11 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         if (vh == null) {
             vh = new ViewHolder();
             vh.name = (TextView)convertView.findViewById(R.id.name);
+            vh.balance = (TextView)convertView.findViewById(R.id.balance);
         }
 
         vh.name.setText(account.getName());
+        vh.balance.setText(String.format(Locale.getDefault(), "%.2f", account.getBalance()));
 
         return convertView;
     }
@@ -58,7 +62,7 @@ public class AccountAdapter extends ArrayAdapter<Account> {
     private static class ViewHolder {
 
         private TextView name;
-
+        private TextView balance;
 
     }
 

@@ -9,10 +9,12 @@ import java.util.Map;
 public class Account extends AccountBody {
 
     private long id;
+    private double balance;
 
-    public Account(long id, String name, double initialBalance) {
+    public Account(long id, String name, double initialBalance, double balance) {
         super(name, initialBalance);
         this.id = id;
+        this.balance = balance;
     }
 
     public long getId() {
@@ -21,6 +23,14 @@ public class Account extends AccountBody {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     private static Map<Long, Account> cache;
