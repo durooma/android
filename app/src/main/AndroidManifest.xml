@@ -39,7 +39,7 @@
         </service>
 
         <activity
-            android:name=".SplashActivity_"
+            android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

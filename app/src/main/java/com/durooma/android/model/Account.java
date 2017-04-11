@@ -43,6 +43,10 @@ public class Account extends AccountBody {
         return cache.values();
     }
 
+    public static void clearCache() {
+        cache = null;
+    }
+
     public static boolean hasCache() {
         return cache != null;
     }
