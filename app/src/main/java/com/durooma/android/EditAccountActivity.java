@@ -1,14 +1,11 @@
 package com.durooma.android;
 
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import com.durooma.android.api.Api;
 import com.durooma.android.model.AccountBody;
-import com.durooma.android.util.DialogUtil;
-import com.durooma.android.util.TextInputLayoutAdapter;
-import com.mobsandgeeks.saripaar.exception.ConversionException;
-import org.androidannotations.annotations.*;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.rengwuxian.materialedittext.MaterialEditText;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 
@@ -16,26 +13,23 @@ import rx.android.schedulers.AndroidSchedulers;
 public class EditAccountActivity extends EditActivity implements Observer<Void> {
 
     @ViewById
-    TextInputLayout name;
+    @NotEmpty
+    MaterialEditText name;
 
     @ViewById
-    TextInputLayout initialBalance;
+    @NotEmpty
+    MaterialEditText initialBalance;
 
-    private TextInputLayoutAdapter adapter = new TextInputLayoutAdapter();
 
     @Override
     public void onValidationSucceeded() {
         super.onValidationSucceeded();
-        try {
-            Api.get().addAccount(new AccountBody(
-                    adapter.getData(name),
-                    Double.parseDouble(adapter.getData(initialBalance))
-            ))
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this);
-        } catch (ConversionException e) {
-            e.printStackTrace();
-        }
+        Api.get().addAccount(new AccountBody(
+                name.getText().toString(),
+                Double.parseDouble(initialBalance.getText().toString())
+        ))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this);
     }
 
 }

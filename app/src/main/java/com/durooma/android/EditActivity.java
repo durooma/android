@@ -55,6 +55,10 @@ public class EditActivity extends AppCompatActivity implements Observer<Void>, V
         validator.setValidationListener(this);
     }
 
+    protected Validator getValidator() {
+        return validator;
+    }
+
     @Override
     public void setContentView(int layoutResID) {
         getLayoutInflater().inflate(layoutResID, content, true);
