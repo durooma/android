@@ -3,6 +3,8 @@ package com.durooma.android.api;
 import com.andretietz.retroauth.AndroidAuthenticationHandler;
 import com.andretietz.retroauth.Retroauth;
 import com.durooma.android.TokenProvider;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -16,6 +18,8 @@ public class LocalEnvironment implements Environment<DuroomaApi> {
 
     LocalEnvironment() {
 
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
@@ -24,7 +28,7 @@ public class LocalEnvironment implements Environment<DuroomaApi> {
         retrofit = new Retroauth.Builder<>(AndroidAuthenticationHandler.create(new TokenProvider()))
                 .baseUrl("http://10.0.2.2:8080")
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(httpClient.build())
                 .build();
     }

@@ -10,11 +10,14 @@ import com.durooma.android.R;
 import com.durooma.android.model.Account;
 import com.durooma.android.model.Transaction;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class TransactionAdapter extends ArrayAdapter<Transaction> {
 
     private LayoutInflater inflater;
+    private DateFormat dateFormat = SimpleDateFormat.getDateInstance();
 
     public TransactionAdapter(Context context) {
         super(context, R.layout.item_transaction);
@@ -30,14 +33,19 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
         ViewHolder vh = (ViewHolder)convertView.getTag();
         if (vh == null) {
             vh = new ViewHolder();
-            vh.sourceAccount = (TextView)convertView.findViewById(R.id.source_account);
-            vh.transfer = convertView.findViewById(R.id.transfer);
+            vh.targetAccount = (TextView)convertView.findViewById(R.id.target_account);
+            vh.arrow = convertView.findViewById(R.id.arrow);
             vh.amount = (TextView)convertView.findViewById(R.id.amount);
             vh.account = (TextView)convertView.findViewById(R.id.account);
+            vh.date = (TextView)convertView.findViewById(R.id.date);
+            vh.description = (TextView)convertView.findViewById(R.id.description);
         }
 
         vh.amount.setText(String.format(Locale.getDefault(), "%.2f", transaction.getAmount()));
-        vh.transfer.setVisibility(View.GONE);
+        vh.description.setText(transaction.getDescription());
+        vh.date.setText(dateFormat.format(transaction.getDate()));
+        vh.targetAccount.setVisibility(View.GONE);
+        vh.arrow.setVisibility(View.GONE);
         if (transaction.getSource() != null && transaction.getTarget() == null) {
             // income:
             vh.account.setText(Account.get(transaction.getSource()).getName());
@@ -46,9 +54,10 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
             vh.account.setText(Account.get(transaction.getTarget()).getName());
         } else {
             // transfer:
-            vh.transfer.setVisibility(View.VISIBLE);
-            vh.sourceAccount.setText(Account.get(transaction.getSource()).getName());
-            vh.account.setText(Account.get(transaction.getTarget()).getName());
+            vh.targetAccount.setVisibility(View.VISIBLE);
+            vh.arrow.setVisibility(View.VISIBLE);
+            vh.targetAccount.setText(Account.get(transaction.getTarget()).getName());
+            vh.account.setText(Account.get(transaction.getSource()).getName());
         }
 
         return convertView;
@@ -66,10 +75,12 @@ public class TransactionAdapter extends ArrayAdapter<Transaction> {
 
     private static class ViewHolder {
 
-        private TextView sourceAccount;
-        private View transfer;
+        private TextView targetAccount;
+        private View arrow;
         private TextView amount;
         private TextView account;
+        private TextView date;
+        private TextView description;
 
 
     }

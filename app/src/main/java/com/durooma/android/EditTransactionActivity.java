@@ -10,14 +10,19 @@ import com.durooma.android.util.MaterialSpinner;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import org.androidannotations.annotations.*;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 @EActivity(R.layout.activity_edit_transaction)
-public class EditTransactionActivity extends EditActivity implements Observer<Void>, Validator.ValidationListener {
+public class EditTransactionActivity extends EditActivity implements Observer<Void>, Validator.ValidationListener, DatePickerDialog.OnDateSetListener {
 
     static final String EXTRA_TRANSACTION_TYPE = "com.durooma.android.EditTransactionActivity.EXTRA_TRANSACTION_TYPE";
 
@@ -40,6 +45,15 @@ public class EditTransactionActivity extends EditActivity implements Observer<Vo
 
     @ViewById
     MaterialEditText exemptAmount;
+
+    @ViewById(R.id.date)
+    @NotEmpty
+    MaterialEditText dateText;
+    Date date;
+    DateFormat dateFormat = SimpleDateFormat.getDateInstance();
+
+    @ViewById
+    MaterialEditText description;
 
     @Extra("com.durooma.android.EditTransactionActivity.EXTRA_TRANSACTION_TYPE")
     String mode;
@@ -67,6 +81,17 @@ public class EditTransactionActivity extends EditActivity implements Observer<Vo
         }
     }
 
+    @Click(R.id.date)
+    void onDateClick() {
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dialog = DatePickerDialog.newInstance(
+                this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH));
+        dialog.show(getFragmentManager(), "DatePickerDialog");
+    }
+
     @Click(R.id.is_exempt)
     void onIsExemptClick() {
         if (isExempt.isChecked() && exemptAmount.getText().length() == 0) {
@@ -79,13 +104,22 @@ public class EditTransactionActivity extends EditActivity implements Observer<Vo
     public void onValidationSucceeded() {
         super.onValidationSucceeded();
         Api.get().addTransaction(new TransactionBody(
+                date,
                 source.getSelectedPosition() >= 0 ? adapter.getItem(source.getSelectedPosition()).getId() : null,
                 target.getSelectedPosition() >= 0 ? adapter.getItem(target.getSelectedPosition()).getId() : null,
                 new BigDecimal(amount.getText().toString()),
-                exemptAmount.getText().length() > 0 ? new BigDecimal(exemptAmount.getText().toString()) : new BigDecimal("0.00")
+                exemptAmount.getText().length() > 0 ? new BigDecimal(exemptAmount.getText().toString()) : new BigDecimal("0.00"),
+                description.getText().toString()
         ))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this);
     }
 
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        Calendar c = Calendar.getInstance();
+        c.set(year, monthOfYear, dayOfMonth);
+        date = c.getTime();
+        dateText.setText(dateFormat.format(date));
+    }
 }

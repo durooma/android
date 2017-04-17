@@ -10,47 +10,64 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/amount"
+        android:hint="@string/amount"
+        app:met_floatingLabel="highlight"
+        android:inputType="numberDecimal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.durooma.android.util.MaterialSpinner
+        android:id="@+id/source"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/source_account"
+        app:met_floatingLabel="highlight"
+        />
+
+    <com.durooma.android.util.MaterialSpinner
+        android:id="@+id/target"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/target_account"
+        app:met_floatingLabel="highlight"
+        />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/is_exempt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/amount"
-            android:hint="@string/amount"
+            android:id="@+id/exempt_amount"
+            android:hint="@string/exempt"
             app:met_floatingLabel="highlight"
             android:inputType="numberDecimal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-
-        <com.durooma.android.util.MaterialSpinner
-            android:id="@+id/source"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/source_account"
-            app:met_floatingLabel="highlight"
-            />
-
-        <com.durooma.android.util.MaterialSpinner
-            android:id="@+id/target"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/target_account"
-            app:met_floatingLabel="highlight"
-            />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <CheckBox
-                android:id="@+id/is_exempt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:id="@+id/exempt_amount"
-                android:hint="@string/exempt"
-                app:met_floatingLabel="highlight"
-                android:inputType="numberDecimal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-
     </LinearLayout>
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/date"
+        android:hint="@string/date"
+        app:met_floatingLabel="highlight"
+        android:focusable="false"
+        android:inputType="date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/description"
+        android:hint="@string/description"
+        app:met_floatingLabel="highlight"
+        android:inputType="text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

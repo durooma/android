@@ -1,13 +1,14 @@
 package com.durooma.android.model;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 
 public class Transaction extends TransactionBody {
 
     private long id;
 
-    public Transaction(long id, Long source, Long target, BigDecimal amount, BigDecimal huquqAmount) {
-        super(source, target, amount, huquqAmount);
+    public Transaction(long id, Date date, Long source, Long target, BigDecimal amount, BigDecimal exempt, String description) {
+        super(date, source, target, amount, exempt, description);
         this.id = id;
     }
 
